@@ -1,0 +1,12 @@
+{% extends "admin/base_site.html" %}
+
+{% block title %}Importar Dados{% endblock  %}
+
+{% block content %}
+    <h1>Importar Dados</h1>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %} 
+        {{ form.as_p }}
+        <p><input type="submit" value="Enviar"></p>
+    </form>
+{% endblock %}
