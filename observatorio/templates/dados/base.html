@@ -1,0 +1,26 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'fa/css/all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/estilos.css' %}">
+</head>
+<body class="bgi1">
+{% block header %}
+    {% include 'dados/cabecalho.html' %}
+{% endblock %}
+<main>{% block content %}{% endblock %}</main>
+{% block footer %}
+    {% include 'dados/rodape.html' %}
+{% endblock %}
+{% block scripts %}
+    <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    {% block extra-scripts %}{% endblock %}
+{% endblock %}
+</body>
+</html>

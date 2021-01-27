@@ -1,0 +1,54 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Importar Dados{{ title }} | {{ site_title|default:'Observatório Socieconômico da COVID-19 UFSM' }}{% endblock %}
+
+{% block branding %}
+<h1 id="site-name"><a href="{% url 'admin:index' %}">{{ 'Observatório Socieconômico da COVID-19 UFSM' }}</a></h1>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}
+
+<!-- Container -->
+<div id="container">
+
+    <!-- Header -->
+    <div id="header">
+    
+        {% block usertools %}
+        {% if user.is_authenticated %}
+        <div id="user-tools">
+            {% block welcome-msg %}
+                Bem-vindo(a),
+                <strong>{% firstof user.get_short_name user.get_username %}</strong>.
+            {% endblock %}
+            {% block userlinks %}
+                <a href="{% url 'admin:index' %}">Ver o site</a> /
+                {% if user.has_usable_password %}
+                <a href="{% url 'admin:password_change' %}">Alterar Senha</a> /
+                {% endif %}
+                <a href="{% url 'admin:logout' %}">Encerrar Sessão</a>
+            {% endblock %}
+        </div>
+        {% endif %}
+        {% endblock %}
+
+    </div>
+    <!-- END Header -->
+    {% block breadcrumbs %}
+    <div class="breadcrumbs">
+    <a href="{% url 'admin:index' %}">Início</a> › 
+    <a href="{% url 'importar_dados' %}">Importar Dados</a>
+    </div>
+    {% endblock %}
+
+    
+</div>
+
+{% block content %}
+    <h1>Importar Dados</h1>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %} 
+        {{ form.as_p }}
+        <p><input type="submit" value="Enviar"></p>
+    </form>
+{% endblock %}

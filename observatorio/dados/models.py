@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.text import slugify
+from easy_thumbnails.fields import ThumbnailerField
 
 #Abrangência
 class Continente(models.Model):
@@ -62,6 +63,8 @@ class Municipio(models.Model):
     nome = models.CharField(max_length=255)
     nome_normalizado = models.SlugField(max_length=255, editable=False)
     estado = models.ForeignKey(Estado, on_delete=models.CASCADE)
+    numero_habitantes = models.IntegerField(blank=True, null=True)
+    total_de_repasse_programa_apoio_financeiro = models.DecimalField(blank=True, decimal_places=2, max_digits=25, null=True)
     
     class Meta:
         ordering = ('nome',)
@@ -100,7 +103,7 @@ class Variavel(models.Model):
     abrangencia = models.CharField(max_length=4, choices=ABRANGENCIA_VARIAVEL)
     ativa = models.BooleanField(default=True)
     ordem = models.IntegerField(default=0)
-    fonte = models.ForeignKey(Fonte, on_delete=models.CASCADE, blank=True)
+    fonte = models.ForeignKey(Fonte, on_delete=models.CASCADE, blank=True, null=True)
     UNIDADES_VARIAVEL=[
         ('SEMU', 'Sem Unidade'),
         ('INTE', 'Inteiro'),
@@ -111,6 +114,7 @@ class Variavel(models.Model):
         ('PORC', 'Porcentagem'),
     ]
     unidade = models.CharField(max_length=4, choices=UNIDADES_VARIAVEL, blank=True)
+    variavel_exclusiva_do_estado_RS = models.BooleanField(default=False)
     
     class Meta:
         ordering = ('nome',)
@@ -145,11 +149,17 @@ class Grafico(models.Model):
     def save(self):
         self.nome_normalizado = slugify(self.nome)
         super(Grafico,self).save()
+    
+    def __str__(self):
+        return self.nome
 
 class VariaveisGrafico(models.Model):
     grafico = models.ForeignKey(Grafico, on_delete=models.CASCADE)
     variavel = models.ForeignKey(Variavel, on_delete=models.CASCADE)
     ordem = models.IntegerField(default=0)
+    
+    def __str__(self):
+        return 'Variável: '+self.variavel.nome
 
     class Meta:
         verbose_name = "variável do gráfico"
@@ -248,3 +258,99 @@ class VariavelMunicipioDecimal(VariavelMunicipio):
     valor = models.DecimalField(blank=True, decimal_places=10, max_digits=25, null=True)
     class Meta:
         abstract = False
+
+class Integrante(models.Model):
+    nome = models.CharField(max_length=255)
+    instituicao = models.CharField(max_length=255, null=True, blank=True, verbose_name='Instituição')
+    SELECAO_EQUIPE = [
+        ('COOR', 'Coordenação'),
+        ('EXEC', 'Equipe Executiva'),
+        ('OPER', 'Equipe Operacional'),
+        ('APOI', 'Estrutura Apoiadora'),
+        ('COLA', 'Equipe Colaborativa'),
+        ('FINA', 'Estrutura Financiadora'),
+    ]
+    equipe = models.CharField(max_length=4, choices=SELECAO_EQUIPE)
+    ordem = models.IntegerField(default=0)
+    
+    class Meta:
+        ordering = ('nome', 'ordem', )
+        verbose_name = "Integrante"
+        verbose_name_plural = "Integrantes"
+        
+    def __str__(self):
+        return self.nome
+
+class TextoOficial(models.Model):
+    titulo = models.CharField(max_length=255, verbose_name='Título')
+    data = models.DateField(db_index=True)
+    descricao = models.CharField(max_length=2000, verbose_name='Descrição', null=True, blank=True)
+    url = models.URLField(blank=True, max_length=1000)
+    pais = models.ForeignKey(Pais, null=True, blank = True, on_delete=models.SET_NULL)
+    estado = models.ForeignKey(Estado, null=True, blank = True, on_delete=models.SET_NULL)
+    
+    class Meta:
+        ordering = ('-data', )
+        verbose_name = "Texto Oficial"
+        verbose_name_plural = "Textos Oficiais"
+        
+    def __str__(self):
+        return self.titulo
+
+class Documento(models.Model):
+    titulo = models.CharField(max_length=255, verbose_name='Título')
+    data = models.DateField(db_index=True)
+    TIPO_DOCUMENTO = [
+        ('CONJ', 'Análise de Conjuntura'),
+        ('DISC', 'Texto para Discussão'),
+    ]
+    tipo = models.CharField(max_length=4, choices=TIPO_DOCUMENTO, blank=True)
+    autores = models.ManyToManyField(Integrante, through='AutorDocumento', related_name="autores_do_documento")
+    arquivo = ThumbnailerField(upload_to ='documents/%Y/%m/%d/')
+    numero = models.IntegerField(default=0, verbose_name='Número')
+    
+    class Meta:
+        ordering = ('-data', )
+        verbose_name = "Documento"
+        verbose_name_plural = "Documentos"
+    
+    def __str__(self):
+        return self.titulo
+    
+    def save(self):
+        if(self.numero == 0):
+            self.numero = (Documento.objects.all().filter(tipo=self.tipo).count())+1
+        super(Documento,self).save()
+
+class AutorDocumento(models.Model):
+    documento = models.ForeignKey(Documento, null=True, blank = True, on_delete=models.SET_NULL)
+    autor = models.ForeignKey(Integrante, null=True, blank = True, on_delete=models.SET_NULL)
+    ordem = models.IntegerField(default=0)
+
+    def __str__(self):
+        return 'Autor: '+self.autor.nome
+
+    class Meta:
+        ordering = ('ordem', )
+        verbose_name = "autor do documento"
+        verbose_name_plural = "autores do documento"
+        unique_together = (("documento", "autor"),)
+
+class NoticiaExterna(models.Model):
+    titulo = models.CharField(max_length=1000, verbose_name='Título')
+    url = models.URLField(blank=True, max_length=1000)
+    fonte = models.CharField(max_length=255, blank=True)
+    TIPO_NOTICIA_EXTERNA = [
+        ('CRIA', 'Criação'),
+        ('NOTI', 'Notícia de Opinião e Entrevistas'),
+        ('LIVE', 'Lives'),
+    ]
+    tipo = models.CharField(max_length=4, choices=TIPO_NOTICIA_EXTERNA, blank=True)
+    
+    def __str__(self):
+        return self.titulo
+    
+    class Meta:
+        ordering = ('-id', )
+        verbose_name = "Notícia Externa"
+        verbose_name_plural = "Notícias Externas"

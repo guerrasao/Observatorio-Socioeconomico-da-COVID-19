@@ -18,9 +18,9 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('dados/', include('dados.urls')),
+    path('', include('dados.urls')),
 ]
 
 admin.site.site_header = 'Observatório Socieconômico da COVID-19 UFSM'                    # default: "Django Administration"
 #admin.site.index_title = 'Features area'                 # default: "Site administration"
-#admin.site.site_title = 'HTML title from adminsitration' # default: "Django site admin"
+admin.site.site_title = 'OSE Admin' # default: "Django site admin"
