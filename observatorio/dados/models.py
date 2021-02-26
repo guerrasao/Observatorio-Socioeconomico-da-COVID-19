@@ -133,12 +133,18 @@ class Grafico(models.Model):
     nome_normalizado = models.SlugField(max_length=255, editable=False)
     ativo = models.BooleanField(default=True)
     ordem = models.IntegerField(default=0)
-    abrangencia = models.CharField(max_length=4, choices=Variavel.ABRANGENCIA_VARIAVEL)
+    ABRANGENCIA_GRAFICO = [
+        ('CONT', 'Continente'),
+        ('PAIS', 'País'),
+        ('ESTA', 'Estado'),
+        ('ESRS', 'Estado do RS'),
+        ('MUNI', 'Município'),
+    ]
+    abrangencia = models.CharField(max_length=4, choices=ABRANGENCIA_GRAFICO)
     TIPO_GRAFICO = [
         ('LINH', 'Linhas'),
-        ('BARR', 'Barras'),
     ]
-    tipo = models.CharField(max_length=4, choices=TIPO_GRAFICO, blank=True)
+    tipo = models.CharField(max_length=4, choices=TIPO_GRAFICO, blank=True, default='LINH')
     variaveis = models.ManyToManyField(Variavel, through='VariaveisGrafico', related_name="variaveis_do_grafico")
     
     class Meta:
@@ -189,6 +195,9 @@ class VariavelPais(models.Model):
     class Meta:
         abstract = True
         unique_together = ['variavel','pais','data']
+    
+    def get_data(self):
+        return self.data.strftime("%b/%y")
 
 class VariavelEstado(models.Model):
     chave = models.UniqueConstraint(fields=['variavel','estado','data'], name='pk_variavel_estado_data')

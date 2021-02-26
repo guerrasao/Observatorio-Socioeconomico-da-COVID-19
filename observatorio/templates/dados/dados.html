@@ -2,5 +2,26 @@
 {% load static %}
 {% block title %}Dados{% endblock %}
 {% block content %}
-
+<div class="container box-t1 br-1 bc-1 mb-4-5 d-shadow">
+        <div class="p-md-4 p-0 pt-0 tsd2">
+            <h1 class="fw-bold fs-1 text-center color-light-dark-2 mb-3"><i class="fas fa-database me-3"></i>Dados</h1>
+            {% include "dados/breadcrumb_ini.html" %}
+                <li class="breadcrumb-item"><a href="{% url 'pagina_inicial' %}">OSE</a></li>
+                <li class="breadcrumb-item active color-light-dark-2" aria-current="page">Dados</li>
+            {% include "dados/breadcrumb_end.html" %}
+            <div class="text-center pt-md-2">
+                <p class="fs-3 fw-bold color-light-dark-2">Selecione a Abrangência:</p>
+                <div class="d-lg-flex justify-content-around align-items-center align-middle">
+                    <ul class="list-unstyled order-1 mt-4 mt-md-0">
+                        <li class="pb-25 pt-2 px-5 my-3 bg-bt-green fw-bold fs-5 br-50 d-shadow bc-3px"><a href="{% url 'pais_graficos' pais='brasil' %}" class="text-white text-decoration-none">Federal - Brasil</a></li>
+                        <li class="pb-25 pt-2 px-5 my-3 bg-bt-red fw-bold fs-5 br-50 d-shadow bc-3px"><a href="{% url 'estados' %}" class="text-white text-decoration-none">Estadual</a></li>
+                        <li class="pb-25 pt-2 px-5 my-3 bg-bt-yellow fw-bold fs-5 br-50 d-shadow bc-3px"><a href="{% url 'municipios' %}" class="text-white text-decoration-none">Municipal - Rio Grande do Sul</a></li>
+                    </ul>
+                    <img class="img-fluid ms-150 d-shadow order-0 mt-4 mt-lg-0" src="{% static 'icones/i12.svg' %}" alt="">
+                    <img class="img-fluid ms-150 d-shadow d-none d-xl-block order-2" src="{% static 'icones/i11.svg' %}" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

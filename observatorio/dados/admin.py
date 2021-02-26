@@ -66,8 +66,13 @@ class VariaveisGraficoInLine(admin.TabularInline):
             grafico_id = vet_string_abrangencia[4]
             if grafico_id != 'add':
                 abrangencia_opcao = list(Grafico.objects.filter(id=grafico_id))[0].abrangencia
-                print(abrangencia_opcao)
-                kwargs["queryset"] = Variavel.objects.filter(abrangencia=abrangencia_opcao)
+                if(abrangencia_opcao == 'ESRS'):
+                    kwargs["queryset"] = Variavel.objects.filter(abrangencia='ESTA', ativa=True)
+                elif(abrangencia_opcao == 'ESTA'):
+                    kwargs["queryset"] = Variavel.objects.filter(abrangencia=abrangencia_opcao, ativa=True, variavel_exclusiva_do_estado_RS=False)
+                #print(abrangencia_opcao)
+                else:
+                    kwargs["queryset"] = Variavel.objects.filter(abrangencia=abrangencia_opcao, ativa=True)
             else:
                 kwargs["queryset"] = Variavel.objects.all()[:0]
         return super().formfield_for_foreignkey(db_field, request, **kwargs)

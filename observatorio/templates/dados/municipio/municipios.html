@@ -1,0 +1,130 @@
+{% extends "dados/base.html" %}
+{% load static %}
+{% load humanize %}
+{% load format_data %}
+{% block title %}Dados Municipais - Rio Grande do Sul{% endblock %}
+{% block content %}
+<div class="container box-t2 p-4 br-1 bc-1 mb-4-5 d-shadow">
+        <div class="p-md-4 p-0 pt-0 tsd2">
+            <h1 class="fw-bold fs-1 text-center color-light-dark-2 mb-3"><i class="fas fa-database me-3"></i>Dados Municipais - Filtrar Por Município</h1>
+            {% include "dados/breadcrumb_ini.html" %}
+                    <li class="breadcrumb-item"><a href="{% url 'pagina_inicial' %}">OSE</a></li>
+                    <li class="breadcrumb-item color-light-dark-2"><a href="{% url 'dados' %}">Dados</a></li>
+                    <li class="breadcrumb-item active color-light-dark-2" aria-current="page">Municipais</li>
+            {% include "dados/breadcrumb_end.html" %}
+<div class="row">
+    <div class="text-center color-light-dark-2 d-grid col-md-6">
+        <a class="btn-1 fw-bold" href=""><i class="fas fa-chart-line pe-2"></i>Acessar Ranking Por Município</a>
+    </div>
+    <div class="text-center color-light-dark-2 d-grid col-md-6 mt-3 mt-md-auto">
+        <a class="btn-1 fw-bold" href=""><i class="fas fa-chart-line pe-2"></i>Comparar Variável Entre Municípios</a>
+    </div>
+</div>
+<div class="pt-3 pb-2 text-center">
+    <h3 class="fw-bold">Selecione um município no mapa ou utilize o campo Procurar:</h3>
+    <div><p class="fs-3" id="municipio_atual">-</p></div>
+</div>
+<div class="d-flex justify-content-center">
+    <div class="pt-md-2 d-shadow col-lg-8 pb-1">
+    {% include "dados/municipio/svg_municipios.html" %}
+    </div>
+</div>
+
+<div class="text-center bgg-4 py-1 c-white br-3 mb-3 mt-3"><h3 class="pt-0 fw-bold">Municípios do Rio Grande do Sul</h3></div>
+    <div class="bg-white border dec3">
+        <table id="dados" class="display" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Nome do Município</th>
+                    <th>Número de Habitantes</th>
+                    <th>Total de Repasse - Programa Apoio Financeiro</th>
+                    <th>Código IBGE</th>
+                </tr>
+            </thead>
+            <tbody>
+{% for m in municipios %}<tr><td><a class="fw-bold" href="{% url 'municipio' municipio=m.nome_normalizado %}">{{m.nome}}</a></td><td>{{m.numero_habitantes|intcomma}}</td><td>{{m.total_de_repasse_programa_apoio_financeiro|default_if_none:"-"|intcomma|insert_unit:"REAL"}}</td><td>{{m.codigo_ibge}}</td></tr>{% endfor %}
+            </tbody>
+            <tfoot>
+                <th>Nome do Município</th>
+                <th>Número de Habitantes</th>
+                <th>Total de Repasse - Programa Apoio Financeiro</th>
+                <th>Código IBGE</th>
+            </tfoot>
+        </table>
+    </div>
+</div>
+            
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block extra-scripts %}
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css"/>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.6.5/css/buttons.dataTables.min.css"/>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/fixedcolumns/3.3.2/css/fixedColumns.dataTables.min.css"/>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/scroller/2.0.3/css/scroller.dataTables.min.css"/>
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.5/js/dataTables.buttons.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.html5.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.print.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/fixedcolumns/3.3.2/js/dataTables.fixedColumns.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/scroller/2.0.3/js/dataTables.scroller.min.js"></script>
+<script type="text/javascript">
+    $(function() {
+        $('#svg-map a').hover(function(){
+            $("#municipio_atual").text($(this).attr('name'));
+        }, function(){
+            $("#municipio_atual").text("-");
+        });
+    });
+</script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('table.display').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                { extend: 'copyHtml5', text: 'Copiar Para Area de Tranferência' },
+                { extend: 'excelHtml5', text: 'Exportar Para o Excel (.xlsx)', autoFilter: true, exportOptions: {
+                    orthogonal: 'sort'
+                }, customizeData: function ( data ) {
+                    for (var i=0; i<data.body.length; i++){
+                        for (var j=0; j<data.body[i].length; j++ ){
+                            data.body[i][j] = '\u200C' + data.body[i][j];
+                        }
+                    }
+                }         },
+                { extend: 'pdfHtml5', text: 'Exportar em PDF', orientation: 'landscape', pageSize: 'A2' },
+                { extend: 'csvHtml5', text: 'Exportar em CSV (UTF-8)' },
+                { extend: 'print', text: 'Imprimir Tabela' },
+            ],
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Portuguese.json",
+                buttons: {
+                    copyTitle: 'Tabela Copiada para Area de Transferência',
+                    copySuccess: {
+                        _: '%d linhas copiadas',
+                        1: '1 linha copiada'
+                    }
+                },
+                "thousands": ".",
+                "decimal": ",",
+            },
+            "order": [],
+            "pageLength": 30,
+            scrollY:        false,
+            scrollX:        true,
+            scrollCollapse: true,
+            /*paging:         false,*/
+            columnDefs: [
+                { width: '20%', targets: 0 }
+            ],
+            fixedColumns: true,
+        });
+    } );
+</script>
+{% endblock %}

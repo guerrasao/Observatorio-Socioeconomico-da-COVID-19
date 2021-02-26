@@ -110,6 +110,10 @@
     color: #23818d !important;
 }
 
+.c-white{
+    color: white !important;
+}
+
 .text-shadow-light{
     text-shadow: #b1b1b1 0 2px 3px;
 }
@@ -165,6 +169,21 @@
     border-color: #484848 !important;
     border-style: solid;
     border-width: 4px !important;
+}
+
+.bw-3{
+    border-style: solid;
+    border-width: 3px !important;
+}
+
+.bc-3px{
+    border-color: #484848 !important;
+    border-style: solid;
+    border-width: 3px !important;
+}
+
+.pb-25{
+    padding-bottom:.75rem!important;
 }
 
 .bc-2{
@@ -307,6 +326,27 @@
     border-radius: 50px;
 }
 
+.br-30-10{
+    -webkit-border-radius: 30px;
+    -webkit-border-bottom-right-radius: 10px;
+    -webkit-border-bottom-left-radius: 10px;
+    -moz-border-radius: 30px;
+    -moz-border-radius-bottomright: 10px;
+    -moz-border-radius-bottomleft: 10px;
+    border-radius: 30px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.br-30-0{
+    -webkit-border-top-left-radius: 30px;
+    -webkit-border-top-right-radius: 30px;
+    -moz-border-radius-topleft: 30px;
+    -moz-border-radius-topright: 30px;
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+}
+
 .box-t1{
     background-color: #E5FFFE;
     padding: 35px!important;
@@ -360,6 +400,176 @@
     border-bottom: 2px solid #484848 !important;
 }
 
+.breadcrumb-item + .breadcrumb-item::before{
+    color: #484848 !important;
+}
+
+.bg-bt-green{
+    background-color: #176D42;
+}
+
+.bg-bt-red{
+    background-color: #820000;
+}
+
+.bg-bt-yellow{
+    background-color: #cca60c;
+}
+
+.fc-1 i, .fc-1{
+    color: #23818d !important;
+}
+
+.bgg-0{
+    background-color: #8b0000 !important;
+}
+
+.bgcg-0{
+    border-color: #8b0000 !important;
+}
+
+.bgg-1{
+    background-color: #c23e15 !important;
+}
+
+.bgcg-1{
+    border-color: #c23e15 !important;
+}
+
+.bgg-2{
+    background-color: #d88e07 !important;
+}
+
+.bgcg-2{
+    border-color: #d88e07 !important;
+}
+
+.bgg-3{
+    background-color: #388e3c !important;
+}
+
+.bgcg-3{
+    border-color: #388e3c !important;
+}
+
+.bgg-4{
+    background-color: #00838f !important;
+}
+
+.bgcg-4{
+    border-color: #00838f !important;
+}
+
+.bgg-5{
+    background-color: #2284be !important;
+}
+
+.bgcg-5{
+    border-color: #2284be !important;
+}
+
+.bgg-6{
+    background-color: #1565c0 !important;
+}
+
+.bgcg-6{
+    border-color: #1565c0 !important;
+}
+
+.bgg-7{
+    background-color: #3949ab !important;
+}
+
+.bgcg-7{
+    border-color: #3949ab !important;
+}
+
+.bgg-8{
+    background-color: #6a1b9a !important;
+}
+
+.bgcg-8{
+    border-color: #6a1b9a !important;
+}
+
+.bgg-9{
+    background-color: #98199a !important;
+}
+
+.bgcg-9{
+    border-color: #98199a !important;
+}
+
+.bgg-10{
+    background-color: #880e4f !important;
+}
+
+.bgcg-10{
+    border-color: #880e4f !important;
+}
+
+.bgg-100{
+    background-color: #23818d !important;
+}
+
+.bgcg-100{
+    border-color: #23818d !important;
+}
+
+.btn-1{
+    font-size: 18px;
+    padding: 15px 30px;
+    border-radius: 30px;
+    text-decoration: none;
+    display: inline-block;
+    text-transform: uppercase;
+    background-color: #2899a8;
+    border: 0;
+    outline: 0;
+    color: white;
+}
+
+.btn-1 a{
+    color: white;
+}
+
+@keyframes gradient { 
+    0% { background-position: 0% 0% }
+    50% { background-position: 50% 0% }
+    100% { background-position: 100% 0% }
+}
+
+.btn-1:hover{
+    background: linear-gradient(to right, rgba(122, 95, 255, 1) 15%, #2899a8 35%, rgba(122, 95, 255, 1) 75%);
+    animation: gradient 6s linear infinite;
+    background-size: 300% 300%;
+    color: white;
+}
+
+#svg-map path { fill:#00838f }
+#svg-map text { fill:#fff; font-size: 14px; font-weight:bold; cursor:pointer }
+#svg-map a{ text-decoration:none }
+#svg-map a:hover { cursor:pointer; text-decoration:none }
+#svg-map a:hover path{ fill:rgb(107, 78, 252) !important }
+#svg-map .circle { fill:#00a2b1 }
+#svg-map a:hover .circle { fill:rgb(107, 78, 252) !important; cursor:pointer }
+
+.btn-2 ul a{
+    background-color: #00838f !important;
+}
+
+.btn-2 ul a:hover{
+    background-color: rgb(107, 78, 252) !important;
+}
+
+.btn-2 a{
+    color: white !important;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+
+
 /* X-Small devices (portrait phones, less than 576px)
 // No media query for `xs` since this is the default in Bootstrap
 
@@ -368,6 +578,11 @@
 
 /* Medium devices (tablets, 768px and up)*/
 @media (min-width: 768px) { 
+    /* Fixing wrong display */
+    .list-3 .row-cols-md-3>*{
+        width: 32% !important;
+    }
+    /* endfix */
     .img-150{
         width: 150px;
         height: 150px;

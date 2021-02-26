@@ -1,0 +1,51 @@
+{% extends "dados/base.html" %}
+{% load static %}
+{% block title %}Dados Federais - {% if pais %}{{ pais.nome }}{% endif %}{% endblock %}
+{% block content %}
+<div class="container box-t2 p-4 br-1 bc-1 mb-4-5 d-shadow">
+        <div class="p-md-4 p-0 pt-0 tsd2">
+            <h1 class="fw-bold fs-1 text-center color-light-dark-2 mb-3"><i class="fas fa-database me-3"></i>Dados Estaduais - Filtrar Por Estado</h1>
+            {% include "dados/breadcrumb_ini.html" %}
+                    <li class="breadcrumb-item"><a href="{% url 'pagina_inicial' %}">OSE</a></li>
+                    <li class="breadcrumb-item color-light-dark-2"><a href="{% url 'dados' %}">Dados</a></li>
+                    <li class="breadcrumb-item active color-light-dark-2" aria-current="page">Estaduais</li>
+            {% include "dados/breadcrumb_end.html" %}
+<div class="row">
+    <div class="text-center color-light-dark-2 d-grid col-md-6">
+        <a class="btn-1 fw-bold" href=""><i class="fas fa-chart-line pe-2"></i>Acessar Ranking Por Estado</a>
+    </div>
+    <div class="text-center color-light-dark-2 d-grid col-md-6 mt-3 mt-md-auto">
+        <a class="btn-1 fw-bold" href=""><i class="fas fa-chart-line pe-2"></i>Comparar Variável Entre Estados</a>
+    </div>
+</div>
+<div class="pt-3 pb-2 text-center">
+    <h3 class="">Selecione um estado no mapa ou na lista:</h3>
+    <div><p class="fs-3" id="estado_atual">-</p></div>
+</div>
+<div class="d-lg-flex">
+<div class="pt-md-2 d-shadow col-lg-6 pb-1">
+{% include "dados/estado/svg_estados.html" %}
+</div>
+<div class="col-lg-6 mt-4 btn-2">
+    <ul class="row row-cols-1 row-cols-md-3 list-unstyled justify-content-center">
+        {% for estado in estados %}<a class="col p-2 rounded mb-1 me-1" href="{% url 'estado' estado=estado.nome_normalizado %}"><li class="">{{estado.nome}}</li></a>{% endfor %}
+    </ul>
+</div>
+</div>
+            
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block extra-scripts %}
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script type="text/javascript">
+    $(function() {
+        $('#svg-map a').hover(function(){
+            $("#estado_atual").text($(this).attr('name'));
+        }, function(){
+            $("#estado_atual").text("-");
+        });
+    });
+</script>
+{% endblock %}

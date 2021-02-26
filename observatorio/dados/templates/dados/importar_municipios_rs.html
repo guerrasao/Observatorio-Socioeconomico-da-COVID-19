@@ -44,6 +44,11 @@
     
 </div>
 
+{% block messages %}
+    {% if request.GET.sucesso %}<ul class="messagelist"><li class="success">{{request.GET.sucesso}}</li></ul>{% endif %}
+    {% if request.GET.erro %}<ul class="messagelist"><li class="error">{{request.GET.erro}}</li></ul>{% endif %}
+{% endblock %}
+
 {% block content %}
     <h1>Importar Municípios</h1>
     <form method="POST" enctype="multipart/form-data">

@@ -24,14 +24,15 @@ def importar_xlsx(arquivo):
         linhas_tab = dados.index
         for linha_atual in linhas_tab:
             for var_atual in variaveis_tab:
+                #print(var_atual)
                 if((var_atual != 'Data') and (var_atual != 'Tempo/Variável')):
                     var_atual_obj = variaveis_pais.filter(nome=var_atual).values()
                     #print(var_atual_obj[0]['unidade'])
                     if(var_atual_obj[0]['unidade'] == 'SEMU' or var_atual_obj[0]['unidade'] == 'INTE'):
                         linha_existe = VariavelPaisInteiro.objects.filter(pais=pais, data=dados.at[linha_atual, 'Data'], variavel = var_atual_obj[0]['id']).order_by('-atualizado_em')
-                        print(linha_existe)
+                        #print(linha_existe)
                         cont_linha_existe = linha_existe.count()
-                        print(cont_linha_existe)
+                        #print(cont_linha_existe)
                         #linha não existe, adicionar
                         if cont_linha_existe == 0: 
                             l = VariavelPaisInteiro(
@@ -43,8 +44,8 @@ def importar_xlsx(arquivo):
                             l.save()
                         #linha existe, atualizar
                         elif cont_linha_existe == 1:
-                            print(linha_existe)
-                            print(linha_existe.values())
+                            #print(linha_existe)
+                            #print(linha_existe.values())
                             l = VariavelPaisInteiro.objects.get(id=linha_existe.values()[0]['id'])
                             l.valor = dados.at[linha_atual, var_atual_obj[0]['nome']]
                             l.save()
@@ -67,9 +68,9 @@ def importar_xlsx(arquivo):
                         var_atual_obj[0]['unidade'] == 'PORC'
                         ):
                         linha_existe = VariavelPaisDecimal.objects.filter(pais=pais, data=dados.at[linha_atual, 'Data'], variavel = var_atual_obj[0]['id']).order_by('-atualizado_em')
-                        print(linha_existe)
+                        #print(linha_existe)
                         cont_linha_existe = linha_existe.count()
-                        print(cont_linha_existe)
+                        #print(cont_linha_existe)
                         #linha não existe, adicionar
                         if cont_linha_existe == 0: 
                             l = VariavelPaisDecimal(
@@ -81,8 +82,8 @@ def importar_xlsx(arquivo):
                             l.save()
                         #linha existe, atualizar
                         elif cont_linha_existe == 1:
-                            print(linha_existe)
-                            print(linha_existe.values())
+                            #print(linha_existe)
+                            #print(linha_existe.values())
                             l = VariavelPaisDecimal.objects.get(id=linha_existe.values()[0]['id'])
                             l.valor = dados.at[linha_atual, var_atual_obj[0]['nome']]
                             l.save()
