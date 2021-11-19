@@ -1,0 +1,64 @@
+{% load static %}
+<script type="text/javascript" src="{% static 'jquery/jquery-3.6.0.min.js' %}"></script>
+<link rel="stylesheet" type="text/css" href="{% static 'datatables/bundle/datatables.min.css' %}"/>
+
+<script type="text/javascript" src="{% static 'datatables/bundle/datatables.min.js' %}"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('table.display').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                { extend: 'copyHtml5', text: 'Copiar Para Área de Tranferência' },
+                { extend: 'excelHtml5', text: 'Exportar Para o Excel (.xlsx)', autoFilter: true, exportOptions: {
+                    orthogonal: 'sort'
+                }, customizeData: function ( data ) {
+                    for (var i=0; i<data.body.length; i++){
+                        for (var j=0; j<data.body[i].length; j++ ){
+                            data.body[i][j] = '\u200C' + data.body[i][j];
+                        }
+                    }
+                }         },
+                {# { extend: 'pdfHtml5', text: 'Exportar em PDF', orientation: 'landscape', pageSize: 'A2' }, #}
+                { extend: 'csvHtml5', text: 'Exportar em CSV (UTF-8)' },
+                { extend: 'print', text: 'Imprimir Tabela' },
+            ],
+            "language": {
+                "sProcessing":   "A processar...",
+                "sLengthMenu":   "Mostrar _MENU_ registros",
+                "sZeroRecords":  "Não foram encontrados resultados",
+                "sInfo":         "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+                "sInfoEmpty":    "Mostrando de 0 até 0 de 0 registros",
+                "sInfoFiltered": "(filtrado de _MAX_ registros no total)",
+                "sInfoPostFix":  "",
+                "sSearch":       "Procurar:",
+                "sUrl":          "",
+                "oPaginate": {
+                    "sFirst":    "Primeiro",
+                    "sPrevious": "Anterior",
+                    "sNext":     "Seguinte",
+                    "sLast":     "Último",
+                },
+                buttons: {
+                    copyTitle: 'Tabela Copiada para Área de Transferência',
+                    copySuccess: {
+                        _: '%d linhas copiadas',
+                        1: '1 linha copiada'
+                    }
+                },
+                "thousands": ".",
+                "decimal": ",",
+            },
+            "order": [],
+            "pageLength": 50,
+            scrollY:        false,
+            scrollX:        true,
+            scrollCollapse: true,
+            /*paging:         false,*/
+            columnDefs: [
+                { width: '20%', targets: 0 },
+                {"className": "dt-center", "targets": "_all"}
+            ],
+            fixedColumns: true,
+        });
+    } );
+</script>

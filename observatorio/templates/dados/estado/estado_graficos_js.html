@@ -1,0 +1,20 @@
+{% block extra-scripts %}
+<script src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+var cores = ['#8b0000','#c23e15','#d88e07','#388e3c','#00838f','#2284be','#1565c0','#3949ab','#6a1b9a','#98199a','#880e4f'];
+google.charts.load('current', {'packages':['corechart'], 'language': 'pt-br'});
+{% load l10n %}{% autoescape on %}{% for grafico in graficos %}google.charts.setOnLoadCallback(drawchart{{grafico.id}});function drawchart{{grafico.id}}(){
+var data{{grafico.id}} = new google.visualization.arrayToDataTable([
+    ['Mês',{% for v in grafico.vars_graf %}{label: '{{v.variavel__nome}}', type: 'number'}{% if not forloop.last %},{% endif %}{% endfor %}],
+    {% for data_atual in grafico.datas %}
+        {% if data_atual.valores.count > 0 %}
+            ['{{data_atual.datafinal}}',
+            {% for va in data_atual.valores %}
+                {% if va.valor != None %}{v:{{va.valor|unlocalize}}, f:'{{va.valor|no_zero:va.variavel__unidade|intcomma|insert_unit_with_space:va.variavel__unidade}}'}
+                {% else %}null
+                {% endif %}
+                {% if not forloop.last %},{% endif %}
+            {% endfor %}],
+        {% endif %}
+    {% endfor %}]);var options{{grafico.id}}={lineWidth:3,pointSize:8,{%if grafico.formato_eixo != None %}vAxis:{'format':'{{grafico.formato_eixo|alterar_eixo}}'},{% endif %}/*title:'{{grafico.nome}}',*/colors: [{% for cor_atual in grafico.indice_cores %}cores[{{cor_atual}}],{% endfor %}],'is3D':true,legend:{position:'top'},height: 400,};var chart{{grafico.id}}=new google.visualization.LineChart(document.getElementById('grafico{{grafico.id}}'));chart{{grafico.id}}.draw(data{{grafico.id}}, options{{grafico.id}});}{% endfor %}{% endautoescape %}</script>
+{% endblock %}

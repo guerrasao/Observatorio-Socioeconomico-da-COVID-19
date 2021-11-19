@@ -1,0 +1,13 @@
+<nav aria-label="Paginação">
+    <ul class="pagination justify-content-center">
+        <li class="page-item {% if not page.has_previous %} disabled{% endif %}">
+            <a class="page-link" href="{% if not page.has_previous %}#{% else %}?page={{page.previous_page_number}}{% endif %}" tabindex="-1" {% if not page.has_previous %} aria-disabled="true"{% endif %}>Anterior</a>
+        </li>
+        {% for a in page.paginator %}
+            <li class="page-item{% if a.number == page.number %} active" aria-current="page"{% else %}"{% endif %}><a class="page-link" href="?page={{a.number}}">{{a.number}}</a></li>
+        {% endfor %}
+        <li class="page-item {% if not page.has_next %} disabled{% endif %}">
+            <a class="page-link" href="{% if not page.has_next %}#{% else %}?page={{page.next_page_number}}{% endif %}" tabindex="-1" {% if not page.has_next %} aria-disabled="true"{% endif %}>Próxima</a>
+        </li>
+    </ul>
+</nav>

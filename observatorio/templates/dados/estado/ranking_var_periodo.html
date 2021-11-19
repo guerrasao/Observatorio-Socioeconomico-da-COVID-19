@@ -1,0 +1,87 @@
+{% extends "dados/base.html" %}
+{% load static %}
+{% load humanize %}
+{% load format_data %}
+{% block title %}Dados Estaduais - Ranking {% if mensal %} Mensal {% endif %} - {{variavel.nome}}{% endblock %}
+{% block content %}
+<div class=" box-t1 br-1 bc-1 mb-4-5 d-shadow">
+        <div class="p-md-4 p-0 pt-0 tsd2">
+            <h1 class="fw-bold fs-1 text-center color-light-dark-2 mb-3"><i class="fas fa-database me-3"></i>Dados Estaduais - Ranking {% if mensal %} Mensal {% endif %} - {{variavel.nome}}{% if periodo != 'Todos' %} - {{periodo}}{% endif %}</h1>
+            {% include "dados/breadcrumb_ini.html" %}
+                    <li class="breadcrumb-item"><a href="{% url 'pagina_inicial' %}">OSE</a></li>
+                    <li class="breadcrumb-item color-light-dark-2"><a href="{% url 'dados' %}">Dados</a></li>
+                    <li class="breadcrumb-item color-light-dark-2"><a href="{% url 'estados' %}">Estaduais</a></li>
+                    <li class="breadcrumb-item color-light-dark-2"><a href="{% if mensal %}{% url 'rank_estados_mensal' %}">Ranking Mensal{% else %}{% url 'rank_estados' %}">Ranking{% endif %}</a></li>
+                    <li class="breadcrumb-item active color-light-dark-2" aria-current="page">Variável: {{variavel.nome}} - Período: {{periodo}}</li>
+            {% include "dados/breadcrumb_end.html" %}
+            <div class="fs-5"><p>Última Atualização em: {{ultima_atualizacao}}</p></div>
+            <div class="text-center bgg-4 py-1 c-white br-3 mb-3"><h3 class="pt-0 fw-bold">Ranking Estadual - Variável: {{variavel.nome}} - Período: {{periodo}}</h3></div>
+            {% block messages %}
+                {% if messages %}
+                    {% for message in messages %}
+                        <div {% if message.tags == 'info' %} class="alert alert-info" {% endif %} {% if message.tags == 'error' %} class="alert alert-error" {% endif %}>{{ message|capfirst }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endblock messages %}
+            {% if dados != None %}
+            <div class="" id="grafico0" style="width: 100%; height: 500px;"></div>
+            <div class="bg-white border dec3">
+            <table id="dados" class="display dec3" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Posição/Ranking</th><th>Estado</th>{% if variavel %}<th>{{variavel.nome}}{% if not mensal %} (Valor Acumulado){% endif %}</th>{% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+{% for d in dados %}<tr><td>{{ forloop.counter }}º</td><td><a class="fw-bold" href="{% url 'estado' estado=d.estado__nome_normalizado %}">{{d.estado__nome}}</a></td><td>{{d.soma|default_if_none:"-"|no_zero:d.variavel__unidade|intcomma|insert_unit:d.variavel__unidade}}</td></tr>{% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>Posição/Ranking</th><th>Estado</th>{% if variavel %}<th>{{variavel.nome}}{% if not mensal %} (Valor Acumulado){% endif %}</th>{% endif %}
+                    </tr>
+                </tfoot>
+            </table>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block extra-scripts %}
+{% if dados.count > 0 %}
+{% include "dados/tabelas_js.html" %}
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+google.charts.load('current', {packages: ['corechart'],'language': 'pt-br'});
+google.charts.setOnLoadCallback(grafico0);
+{% load l10n %}
+var colors = ['#8b0000','#c23e15','#d88e07','#388e3c','#00838f','#2284be','#1565c0','#3949ab','#6a1b9a','#98199a','#880e4f']
+
+function grafico0() {
+    var data = google.visualization.arrayToDataTable([
+        ['Estado', '{{variavel.nome}} (Valor Acumulado)', { role: 'style' }],
+{% for v in dados|slice:5 %}['{{forloop.counter}}º - {{v.estado__nome}}',{% if v.soma != None %}{v:{{v.soma|unlocalize}}, f:'{{v.soma|no_zero:v.variavel__unidade|intcomma|insert_unit_with_space:v.variavel__unidade}}'}{% else %}null{% endif %}, colors[{{forloop.counter0}}]],{% endfor %}]);
+
+    var options = {
+        /*title: 'Ranking Municípios - {{variavel.nome}}{% if periodo != 'Todos' %} - {{periodo}}{% endif %}',*/
+        /*legend:{position:'top'},*/
+        legend: { position: "none" },
+        chartArea: {width: '60%'},
+        colors: ['#8b0000','#c23e15','#d88e07','#388e3c','#00838f','#2284be','#1565c0','#3949ab','#6a1b9a','#98199a','#880e4f'],
+        vAxis: {
+            /*title: '{{variavel.nome}}',*/
+            format:'{{variavel.unidade|alterar_eixo}}',
+            minValue: 0,
+        },
+        hAxis: {
+            title: 'Ranking - Estados'
+        },
+    };
+
+    var chart0 = new google.visualization.ColumnChart(document.getElementById('grafico0'));
+
+    chart0.draw(data, options);
+}
+</script>
+{% endif %}
+{% endblock %}

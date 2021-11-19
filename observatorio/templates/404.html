@@ -1,0 +1,14 @@
+{% extends "dados/base.html" %}
+{% load static %}
+{% block title %}Erro 404 - Página não encontrada{% endblock %}
+{% block content %}
+<div class="container box-t1 br-1 bc-1 mb-4-5 d-shadow">
+        <div class="p-md-4 p-0 pt-0 tsd2">
+            <h1 class="fw-bold fs-1 text-center color-light-dark-2 mb-3"><i class="fas fa-exclamation-circle me-3"></i>Erro 404 - Página não encontrada</h1>
+            <div class="pt-md-2 text-center">
+                <p class="fs-4 fw-bold"> A página: {{request_path}} não foi encontrada!</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

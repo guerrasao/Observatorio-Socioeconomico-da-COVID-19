@@ -6,9 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% endblock %}</title>
     <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
-    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'fa/css/all.min.css' %}">
-    <link rel="stylesheet" href="{% static 'css/estilos.css' %}">
+    <link rel="stylesheet" type="text/css"  href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'fa/css/all.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/estilos.min.css' %}">
+    <meta name="google-site-verification" content="jmcZZ87_Jo3UD0nTTIJ3vP9AAQ_OjY2cXYexbfOKbKE" />
+    {# include 'dados/google_analytics.html' #}
 </head>
 <body class="bgi1">
 {% block header %}

@@ -1,6 +1,6 @@
 {% extends "dados/base.html" %}
 {% load static %}
-{% block title %}Início{% endblock %}
+{% block title %}OSE - Observatório Socioeconômico da COVID-19{% endblock %}
 {% block content %}
 <div class="banner-carousel b-t-4-ld">
     <div id="carouselbanner" class="carousel carousel-dark slide" data-bs-ride="carousel">
@@ -61,7 +61,7 @@
         
     </div>
 </div>
-<div class="bgc-1 b-b-4-ld text-shadow-dark">
+<div class="bgc-1 b-b-4-ld-c2 text-shadow-dark">
     <div class="container d-md-flex justify-content-around align-items-center align-middle pt-4 pb-4 text-center">
         <img class="img-fluid ms-150 d-shadow" src="{% static 'icones/i6.svg' %}" alt="">
         <div class="m-4 bc-1 border-10 shadow d-shadow">
@@ -77,22 +77,22 @@
         </div>
     </div>
 </div>
-<div class="bgc-2 b-b-4-ld tsd2 pt-4 pb-4 pb-md-0 dec">
+<div class="bgc-2 b-b-4-ld-c2 tsd2 pt-4 pb-4 pb-md-0 dec3 auto">
     <div class="container pt-4 pb-0 text-center">
         <div class="box-t2 br-2 bc-1 d-shadow p-2 mb-3 mb-md-4">
             <h1 class="fs-2 fw-bold color-light-dark-2"><i class="fas fa-bell pe-3"></i>Redes Sociais</h1>
         </div>
         <div class="d-md-flex justify-content-between">
             <div class="w-100 box-t1 br-3 br-e bc-1 d-shadow mx-4 ms-0 mb-3 mb-md-5">
-                <img class="img-fluid i-150 d-shadow" src="{% static 'icones/i7.png' %}" alt="">
+                <a href="https://www.instagram.com/observatoriosocioeconomicoufsm/" target="_blank"><img class="img-fluid i-150 d-shadow" src="{% static 'icones/i7.png' %}" alt=""></a>
                 <p><a class="fs-3 fw-bold mb-0 pt-2" href="https://www.instagram.com/observatoriosocioeconomicoufsm/" target="_blank">Instagram</a></p>
             </div>
             <div class="w-100 box-t1 br-3 bc-1 d-shadow mx-4 ms-0 mb-3 mb-md-5">
-                <img class="img-fluid i-150 d-shadow" src="{% static 'icones/i8.svg' %}" alt="">
+                <a href="https://www.facebook.com/observatoriosocioeconomicoufsm/" target="_blank"><img class="img-fluid i-150 d-shadow" src="{% static 'icones/i8.svg' %}" alt=""></a>
                 <p><a class="fs-3 fw-bold mb-0 pt-2" href="https://www.facebook.com/observatoriosocioeconomicoufsm/" target="_blank">Facebook</a></p>
             </div>
             <div class="w-100 box-t1 br-3 br-d bc-1 d-shadow mx-0 ms-0 mb-3 mb-md-5">
-                <img class="img-fluid i-150 d-shadow" src="{% static 'icones/i9.svg' %}" alt="">
+                <a href="https://twitter.com/OSE_COVID19" target="_blank"><img class="img-fluid i-150 d-shadow" src="{% static 'icones/i9.svg' %}" alt=""></a>
                 <p><a class="fs-3 fw-bold mb-0 pt-2" href="https://twitter.com/OSE_COVID19" target="_blank">Twitter</a></p>
             </div>
         </div>

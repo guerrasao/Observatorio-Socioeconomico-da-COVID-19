@@ -1,0 +1,43 @@
+{% extends "dados/base.html" %}
+{% load static %}
+{% block title %}Textos Oficiais - {{abrangencia}}: {{espec_abr.nome}}{% endblock %}
+{% load format_data %}
+{% block content %}
+<div class="bgc-7 b-t-4-ld bc-3 pb-5">
+    <div class="pt-2 pb-2 b-b-4-ld-2 bc-3 bg-6"><h2 class="text-center fw-bold c-white d-shadow-dark">Textos Oficiais - {{abrangencia}}: {{espec_abr.nome}}</h2></div>
+    <div class="pt-2 pb-2 b-b-4-ld-2 bc-3 bg-8">
+        {% include "dados/breadcrumb_ini_3.html" %}
+            <li class="breadcrumb-item"><a href="{% url 'pagina_inicial' %}">OSE</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'textos_oficiais' %}">Textos Oficiais</a></li>
+            <li class="breadcrumb-item active color-light-dark-2" aria-current="page">{{abrangencia}}: {{espec_abr.nome}}</li>
+        {% include "dados/breadcrumb_end_2.html" %}
+    </div>
+    <div class="container pt-4 dec5 pb-4">
+{% block messages %}
+    {% if messages %}
+        {% for message in messages %}
+            <div {% if message.tags == 'info' %} class="alert alert-info" {% endif %} {% if message.tags == 'error' %} class="alert alert-error" {% endif %}>{{ message|capfirst }}</div>
+        {% endfor %}
+    {% endif %}
+{% endblock messages %}
+{% for d in documents %}
+    <div class="card bc-5 border-top-0 border-end-0 border-start-0 mb-4 d-shadow d-shadow-4-hover">
+        <div class="card-header bg-9">
+            <div class="d-lg-flex align-items-lg-center">
+                <div class="col-lg-9 text-uppercase">{% if d.url != None %}<a href="{{d.url}}" class="fs-5 fw-bold" target="_blank">{{d.titulo}}</a>{% else %}<p>d.titulo</p>{% endif %}</div>
+                <div class="col-lg-3 text-lg-end"><span class="fs-5 badge bg-light text-dark">{{d.data}}</span></div>
+            </div>
+        </div>
+        <div class="card-body bc-5-lr bg-10">
+            <blockquote class="blockquote mb-0">
+            <p>{{d.descricao}}</p>
+            </blockquote>
+        </div>
+    </div>
+{% endfor %}
+    </div>
+    <div class="container d-shadow-dark">
+        {% include "dados/pagination_documents_2.html" with page=documents %}
+    </div>
+</div>
+{% endblock %}

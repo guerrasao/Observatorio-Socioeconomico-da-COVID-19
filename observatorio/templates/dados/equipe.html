@@ -1,0 +1,101 @@
+{% extends "dados/base.html" %}
+{% load static %}
+{% block title %}Equipe{% endblock %}
+{% block content %}
+<div class="bgc-3 b-t-4-ld-c3 pb-5">
+    <div class="pt-2 pb-2 b-b-4-ld-c3 bg-6"><h2 class="text-center fw-bold c-white d-shadow-dark">Equipe</h2></div>
+    <div class="pt-2 pb-2 b-b-4-ld-c3 bg-7">
+        {% include "dados/breadcrumb_ini_2.html" %}
+            <li class="breadcrumb-item"><a href="{% url 'pagina_inicial' %}">OSE</a></li>
+            <li class="breadcrumb-item active color-light-dark-2" aria-current="page">Equipe</li>
+        {% include "dados/breadcrumb_end_2.html" %}
+    </div>
+    <div class="container d-shadow-dark list-t1">
+        <div class="d-lg-flex pt-5">
+            <div class="paper-1 mx-2 mx-lg-auto col-lg-4">
+                <img class="img-fluid" src="{% static 'imagens/equipe-1.jpg' %}" alt="">
+            </div>
+            <div class="paper-2 mt-4 mt-lg-auto col-lg-7">
+                <div class="p-4 d-shadow-3">
+                    <h2 class="fs-3 fw-bold color-light-dark-2">Coordenação</h2>
+                    <div class="cu-hr mt-0 d-shadow-2 mb-3"></div>
+                    <ul>
+{% for l in coordenacao %}<li class="fs-5">{{l.nome}}{% if l.instituicao != None%} ({{l.instituicao}}){% endif %}</li>{% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="d-lg-flex pt-5">
+            <div class="paper-1 mx-2 mx-lg-auto col-lg-4 order-lg-1">
+                <img class="img-fluid" src="{% static 'imagens/equipe-2.jpg' %}" alt="">
+            </div>
+            <div class="paper-2 mt-4 mt-lg-auto col-lg-7">
+                <div class="p-4 d-shadow-3">
+                    <h2 class="fs-3 fw-bold color-light-dark-2 order-lg-0">Equipe Executiva</h2>
+                    <div class="cu-hr mt-0 d-shadow-2 mb-3"></div>
+                    <ul>
+{% for l in executiva %}<li class="fs-5">{{l.nome}}{% if l.instituicao != None%} ({{l.instituicao}}){% endif %}</li>{% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="d-lg-flex pt-5">
+            <div class="paper-1 mx-2 mx-lg-auto col-lg-4">
+                <img class="img-fluid" src="{% static 'imagens/equipe-3.jpg' %}" alt="">
+            </div>
+            <div class="paper-2 mt-4 mt-lg-auto col-lg-7">
+                <div class="p-4 d-shadow-3">
+                    <h2 class="fs-3 fw-bold color-light-dark-2 ">Equipe Operacional</h2>
+                    <div class="cu-hr mt-0 d-shadow-2 mb-3"></div>
+                    <ul>
+{% for l in operacional %}<li class="fs-5">{{l.nome}}{% if l.instituicao != None%} ({{l.instituicao}}){% endif %}</li>{% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="d-lg-flex pt-5">
+            <div class="paper-1 mx-2 mx-lg-auto col-lg-4 order-lg-1">
+                <img class="img-fluid" src="{% static 'imagens/equipe-4.jpg' %}" alt="">
+            </div>
+            <div class="paper-2 mt-4 mt-lg-auto col-lg-7">
+                <div class="p-4 d-shadow-3">
+                    <h2 class="fs-3 fw-bold color-light-dark-2 order-lg-0">Estrutura Apoiadora</h2>
+                    <div class="cu-hr mt-0 d-shadow-2 mb-3"></div>
+                    <ul>
+{% for l in apoiadora %}<li class="fs-5">{{l.nome}}{% if l.instituicao != None%} ({{l.instituicao}}){% endif %}</li>{% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="d-lg-flex pt-5">
+            <div class="paper-1 mx-2 mx-lg-auto col-lg-4">
+                <img class="img-fluid" src="{% static 'imagens/equipe-5.jpg' %}" alt="">
+            </div>
+            <div class="paper-2 mt-4 mt-lg-auto col-lg-7">
+                <div class="p-4 d-shadow-3">
+                    <h2 class="fs-3 fw-bold color-light-dark-2 mb-0">Equipe Colaborativa</h2>
+                    <h2 class="fs-5 fw-bold color-light-dark-2">Pesquisadores e profissionais que são autores dos textos para discussão</h2>
+                    <div class="cu-hr mt-0 d-shadow-2 mb-3"></div>
+                    <ul>
+{% for l in colaborativa %}<li class="fs-5">{{l.nome}}{% if l.instituicao != None%} ({{l.instituicao}}){% endif %}</li>{% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="d-lg-flex pt-5">
+            <div class="paper-1 mx-2 mx-lg-auto col-lg-4 order-lg-1">
+                <img class="img-fluid" src="{% static 'imagens/equipe-6.jpg' %}" alt="">
+            </div>
+            <div class="paper-2 mt-4 mt-lg-auto col-lg-7">
+                <div class="p-4 d-shadow-3">
+                    <h2 class="fs-3 fw-bold color-light-dark-2 order-lg-0">Estrutura Financiadora</h2>
+                    <div class="cu-hr mt-0 d-shadow-2 mb-3"></div>
+                    <ul>
+{% for l in financiadora %}<li class="fs-5">{{l.nome}}{% if l.instituicao != None%} ({{l.instituicao}}){% endif %}</li>{% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

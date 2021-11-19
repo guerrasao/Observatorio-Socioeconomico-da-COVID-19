@@ -13,7 +13,20 @@
 
 {% block content %}
 <div id="content-main">
-    {% include "admin/app_list.html" with app_list=app_list show_changelinks=True %}
+    <div class="app-dashboard module">
+        <table>
+            <caption>
+                <a href="#" class="section" title="Dashboard">Dashboard</a>
+            </caption>
+            <tbody>
+                <tr class="model-dashboard">
+                    <th scope="row"><a href="{% url 'dashboard' %}">Dados Coletados - Por Abrangência </a></th>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
     <div class="app-dados_import module">
         <table>
             <caption>
@@ -33,6 +46,7 @@
             </tbody>
         </table>
     </div>
+    {% include "admin/app_list.html" with app_list=app_list show_changelinks=True %}
 </div>
 {% endblock %}
 

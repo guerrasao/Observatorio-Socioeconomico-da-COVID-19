@@ -1,0 +1,28 @@
+{% extends "dados/base.html" %}
+{% load static %}
+{% block title %}Textos Oficiais{% endblock %}
+{% block content %}
+<div class="bgc-7 b-t-4-ld bc-3 pb-5">
+    <div class="pt-2 pb-2 b-b-4-ld-2 bc-3 bg-6"><h2 class="ps-lg-5 text-center fw-bold c-white d-shadow-dark">Textos Oficiais</h2></div>
+    <div class="pt-2 pb-2 b-b-4-ld-2 bc-3 bg-8">
+        {% include "dados/breadcrumb_ini_3.html" %}
+            <li class="breadcrumb-item"><a href="{% url 'pagina_inicial' %}">OSE</a></li>
+            <li class="breadcrumb-item active color-light-dark-2" aria-current="page">Textos Oficiais</li>
+        {% include "dados/breadcrumb_end_2.html" %}
+    </div>
+    <div class="container pt-4 dec2">
+        <div class="text-center pt-md-2">
+            <img class="col-6 col-md-4 col-lg-3 img-fluid d-shadow order-0 mt-2 mb-3 mt-lg-0 d-lg-none" src="{% static 'icones/i13.svg' %}" alt="">
+            <p class="fs-3 fw-bold color-light-dark-2 c-white d-shadow ps-lg-5">Selecione a Abrangência:</p>
+            <div class="d-lg-flex justify-content-around align-items-center align-middle">
+                <img class="d-none d-lg-block col-lg-3 img-fluid d-shadow order-0 mt-4 mt-lg-0" src="{% static 'icones/i13.svg' %}" alt="">
+                <ul class="list-unstyled order-1 mt-4 mt-md-0 col-12 col-lg-5 ps-lg-5">
+                    <li class="pb-25 pt-2 px-5 my-3 bg-bt-green fw-bold fs-5 br-50 d-shadow bw-3 bc-3 d-shadow-5-hover"><a href="{% url 'textos_oficiais_pais' pais='brasil' %}" class="text-white text-decoration-none d-shadow-dark">Federal - Brasil</a></li>
+                    <li class="pb-25 pt-2 px-5 my-3 bg-bt-red fw-bold fs-5 br-50 d-shadow bw-3 bc-3 d-shadow-5-hover"><a href="{% url 'textos_oficiais_estado' estado='rio-grande-do-sul' %}" class="text-white text-decoration-none d-shadow-dark">Estadual - Rio Grande do Sul</a></li>
+                </ul>
+                <img class="col-6 col-md-4 col-lg-3 img-fluid d-shadow-2 order-2" src="{% static 'icones/i14.svg' %}" alt="">
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

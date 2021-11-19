@@ -1,6 +1,5 @@
 from django.db import models
 from django.utils.text import slugify
-from easy_thumbnails.fields import ThumbnailerField
 
 #Abrangência
 class Continente(models.Model):
@@ -35,6 +34,9 @@ class Pais(models.Model):
     def save(self):
         self.nome_normalizado = slugify(self.nome)
         super(Pais,self).save()
+    
+    def get_absolute_url(self):
+        return f'/dados/pais/{self.nome_normalizado}'
 
 class Estado(models.Model):
     codigo_ibge = models.IntegerField(blank=True, null=True, db_index=True)
@@ -57,6 +59,9 @@ class Estado(models.Model):
     def save(self):
         self.nome_normalizado = slugify(self.nome)
         super(Estado,self).save()
+    
+    def get_absolute_url(self):
+        return f'/dados/estado/{self.nome_normalizado}'
 
 class Municipio(models.Model):
     codigo_ibge = models.IntegerField(db_index=True)
@@ -70,6 +75,9 @@ class Municipio(models.Model):
         ordering = ('nome',)
         verbose_name = "município"
         verbose_name_plural = "municípios"
+        constraints = [
+            models.UniqueConstraint(fields=['id','estado'], name='pk_municipio_estado')
+        ]
     
     def __str__(self):
         return self.nome
@@ -77,10 +85,13 @@ class Municipio(models.Model):
     def save(self):
         self.nome_normalizado = slugify(self.nome)
         super(Municipio,self).save()
+    
+    def get_absolute_url(self):
+        return f'/dados/municipio/{self.nome_normalizado}'
 
 class Fonte(models.Model):
     nome = models.CharField(max_length=255)
-    url = models.URLField(blank=True)
+    url = models.URLField(blank=True, null=True)
     
     class Meta:
         ordering = ('nome',)
@@ -170,12 +181,13 @@ class VariaveisGrafico(models.Model):
     class Meta:
         verbose_name = "variável do gráfico"
         verbose_name_plural = "variáveis do gráfico"
-        unique_together = (("grafico", "variavel"),)
+        constraints = [
+            models.UniqueConstraint(fields=['grafico','variavel'], name='pk_grafico_variavel')
+        ]
 
 #Padrão de Variável Conforme Abrangência, sem campo valor, apenas as chaves
 #Implementação sem classes/tipos genéricas(os)
 class VariavelContinente(models.Model):
-    chave = models.UniqueConstraint(fields=['variavel','continente','data'], name='pk_variavel_continente_data')
     variavel = models.ForeignKey(Variavel, on_delete=models.CASCADE)
     continente = models.ForeignKey(Continente, on_delete=models.CASCADE)
     data = models.DateField(db_index=True)
@@ -183,10 +195,8 @@ class VariavelContinente(models.Model):
 
     class Meta:
         abstract = True
-        unique_together = ['variavel','continente','data']
 
 class VariavelPais(models.Model):
-    chave = models.UniqueConstraint(fields=['variavel','pais','data'], name='pk_variavel_pais_data')
     variavel = models.ForeignKey(Variavel, on_delete=models.CASCADE)
     pais = models.ForeignKey(Pais, on_delete=models.CASCADE)
     data = models.DateField(db_index=True)
@@ -194,13 +204,11 @@ class VariavelPais(models.Model):
     
     class Meta:
         abstract = True
-        unique_together = ['variavel','pais','data']
     
     def get_data(self):
         return self.data.strftime("%b/%y")
 
 class VariavelEstado(models.Model):
-    chave = models.UniqueConstraint(fields=['variavel','estado','data'], name='pk_variavel_estado_data')
     variavel = models.ForeignKey(Variavel, on_delete=models.CASCADE)
     estado = models.ForeignKey(Estado, on_delete=models.CASCADE)
     data = models.DateField(db_index=True)
@@ -208,10 +216,8 @@ class VariavelEstado(models.Model):
     
     class Meta:
         abstract = True
-        unique_together = ['variavel','estado','data']
 
 class VariavelMunicipio(models.Model):
-    chave = models.UniqueConstraint(fields=['variavel','municipio','data'], name='pk_variavel_municipio_data')
     variavel = models.ForeignKey(Variavel, on_delete=models.CASCADE)
     municipio = models.ForeignKey(Municipio, on_delete=models.CASCADE)
     data = models.DateField(db_index=True)
@@ -219,7 +225,6 @@ class VariavelMunicipio(models.Model):
     
     class Meta:
         abstract = True
-        unique_together = ['variavel','municipio','data']
 
 #Padrão do campo valor, conforme tipo de dado e abrangência
 #Implementação sem classes/tipos genéricas(os)
@@ -229,44 +234,80 @@ class VariavelContinenteInteiro(VariavelContinente):
     valor = models.IntegerField(blank=True, null=True)
     class Meta:
         abstract = False
+        constraints = [
+            models.UniqueConstraint(fields=['variavel','continente','data'], name='pk_variavel_continente_data_int')
+        ]
 
 class VariavelContinenteDecimal(VariavelContinente):
     valor = models.DecimalField(blank=True, decimal_places=10, max_digits=25, null=True)
     class Meta:
         abstract = False
+        constraints = [
+            models.UniqueConstraint(fields=['variavel','continente','data'], name='pk_variavel_continente_data_dec')
+        ]
 
 #Pais
 class VariavelPaisInteiro(VariavelPais):
     valor = models.IntegerField(blank=True, null=True)
     class Meta:
         abstract = False
+        verbose_name = "Dado - País - Tipo Inteiro"
+        verbose_name_plural = "Dados - País - Tipo Inteiro"
+        constraints = [
+            models.UniqueConstraint(fields=['variavel','pais','data'], name='pk_variavel_pais_data_int')
+        ]
 
 class VariavelPaisDecimal(VariavelPais):
     valor = models.DecimalField(blank=True, decimal_places=10, max_digits=25, null=True)
     class Meta:
         abstract = False
+        verbose_name = "Dado - País - Tipo Decimal"
+        verbose_name_plural = "Dados - País - Tipo Decimal"
+        constraints = [
+            models.UniqueConstraint(fields=['variavel','pais','data'], name='pk_variavel_pais_data_dec')
+        ]
 
 #Estado
 class VariavelEstadoInteiro(VariavelEstado):
     valor = models.IntegerField(blank=True, null=True)
     class Meta:
         abstract = False
+        verbose_name = "Dado - Estado - Tipo Inteiro"
+        verbose_name_plural = "Dados - Estado - Tipo Inteiro"
+        constraints = [
+            models.UniqueConstraint(fields=['variavel','estado','data'], name='pk_variavel_estado_data_int')
+        ]
 
 class VariavelEstadoDecimal(VariavelEstado):
     valor = models.DecimalField(blank=True, decimal_places=10, max_digits=25, null=True)
     class Meta:
         abstract = False
+        verbose_name = "Dado - Estado - Tipo Decimal"
+        verbose_name_plural = "Dados - Estado - Tipo Decimal"
+        constraints = [
+            models.UniqueConstraint(fields=['variavel','estado','data'], name='pk_variavel_estado_data_dec')
+        ]
 
 #Municipio
 class VariavelMunicipioInteiro(VariavelMunicipio):
     valor = models.IntegerField(blank=True, null=True)
     class Meta:
         abstract = False
+        verbose_name = "Dado - Município - Tipo Inteiro"
+        verbose_name_plural = "Dados - Município - Tipo Inteiro"
+        constraints = [
+            models.UniqueConstraint(fields=['variavel','municipio','data'], name='pk_variavel_municipio_data_int')
+        ]
 
 class VariavelMunicipioDecimal(VariavelMunicipio):
     valor = models.DecimalField(blank=True, decimal_places=10, max_digits=25, null=True)
     class Meta:
         abstract = False
+        verbose_name = "Dado - Município - Tipo Decimal"
+        verbose_name_plural = "Dados - Município - Tipo Decimal"
+        constraints = [
+            models.UniqueConstraint(fields=['variavel','municipio','data'], name='pk_variavel_municipio_data_dec')
+        ]
 
 class Integrante(models.Model):
     nome = models.CharField(max_length=255)
@@ -315,7 +356,7 @@ class Documento(models.Model):
     ]
     tipo = models.CharField(max_length=4, choices=TIPO_DOCUMENTO, blank=True)
     autores = models.ManyToManyField(Integrante, through='AutorDocumento', related_name="autores_do_documento")
-    arquivo = ThumbnailerField(upload_to ='documents/%Y/%m/%d/')
+    arquivo = models.FileField(upload_to ='documents/%Y/%m/%d/')
     numero = models.IntegerField(default=0, verbose_name='Número')
     
     class Meta:
@@ -330,6 +371,9 @@ class Documento(models.Model):
         if(self.numero == 0):
             self.numero = (Documento.objects.all().filter(tipo=self.tipo).count())+1
         super(Documento,self).save()
+    
+    def get_absolute_url(self):
+        return f'{self.arquivo.url}'
 
 class AutorDocumento(models.Model):
     documento = models.ForeignKey(Documento, null=True, blank = True, on_delete=models.SET_NULL)
@@ -343,7 +387,9 @@ class AutorDocumento(models.Model):
         ordering = ('ordem', )
         verbose_name = "autor do documento"
         verbose_name_plural = "autores do documento"
-        unique_together = (("documento", "autor"),)
+        constraints = [
+            models.UniqueConstraint(fields=['documento','autor'], name='pk_autor_documento')
+        ]
 
 class NoticiaExterna(models.Model):
     titulo = models.CharField(max_length=1000, verbose_name='Título')

@@ -26,7 +26,7 @@ SECRET_KEY = os.environ['SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '192.168.0.111']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '192.168.0.199']
 
 
 # Application definition
@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'easy_thumbnails',
     'django_extensions',
     'django.contrib.admindocs',
+    'dbbackup',
+    'django.contrib.sitemaps',
 ]
 
 MIDDLEWARE = [
@@ -146,12 +148,25 @@ EMAIL_USE_TLS = True
 LOGIN_URL = '/admin/login/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR,'media')
-MEDIA_URL = '/media/'
+MEDIA_URL = 'media/'
 
-THUMBNAIL_BASEDIR = 'thumbs/'
+#THUMBNAIL_BASEDIR = 'media/'
+#THUMBNAIL_EXTENSION = 'jpg'
+#THUMBNAIL_MEDIA_ROOT = 'D:/Projetos Python/Observatorio-Socioeconomico-da-COVID-19/observatorio/'
+#THUMBNAIL_DEFAULT_STORAGE = 'easy_thumbnails.storage.ThumbnailFileSystemStorage'
+#THUMBNAIL_MEDIA_URL = 'media/'
+#THUMBNAIL_DEBUG = True
 
-THUMBNAIL_ALIASES = {
-    '': {
-        'document': {'size': (300, 200), 'crop': True},
-    },
-}
+# THUMBNAIL_ALIASES = {
+#     '': {
+#         'document': {'size': (300, 200), 'crop': True},
+#     },
+# }
+
+SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = False
+
+DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
+DBBACKUP_STORAGE_OPTIONS = {'location': os.path.join(BASE_DIR,'backup')}
+
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'

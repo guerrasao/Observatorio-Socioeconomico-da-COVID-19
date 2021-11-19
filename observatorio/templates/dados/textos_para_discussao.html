@@ -1,0 +1,44 @@
+{% extends "dados/base.html" %}
+{% load static %}
+{% block title %}Textos para Discussão{% endblock %}
+{% load format_data %}
+{% block content %}
+<div class="bgc-6 b-t-4-ld-c3 pb-5">
+    <div class="pt-2 pb-2 b-b-4-ld-c3 bg-6"><h2 class="text-center fw-bold c-white d-shadow-dark">Textos para Discussão</h2></div>
+    <div class="pt-2 pb-2 b-b-4-ld-c3 bg-7">
+        {% include "dados/breadcrumb_ini_2.html" %}
+            <li class="breadcrumb-item"><a href="{% url 'pagina_inicial' %}">OSE</a></li>
+            <li class="breadcrumb-item active color-light-dark-2" aria-current="page">Textos para Discussão</li>
+        {% include "dados/breadcrumb_end_2.html" %}
+    </div>
+    <div class="pt-2 pb-2 b-b-4-ld-c3 bg-7">
+        <div class="text-center container d-lg-flex align-items-lg-center c-dark-blue">
+            <div class="pe-3 d-shadow-3"><i class="fss-6 fas fa-info-circle"></i></div>
+            <div>
+                <p class="fs-4 fw-bold d-shadow-3 pt-2 text-lg-start">O Observatório Socioeconômico da COVID-19 não se responsabiliza pelos conteúdos e opiniões dos textos publicados, os quais são de responsabilidade exclusiva dos autores.</p>
+            </div>
+        </div>
+    </div>
+    <div class="container pt-4 dec4">
+{% for d in documents %}
+    <div class="d-lg-flex bgc-5 d-shadow-dark p-3 p-lg-4 paper-3 fold-corner mb-4 align-items-lg-center d-shadow-4-hover">
+        <div class="text-center pb-2 pb-lg-0 d-shadow-3 px-lg-2">
+            <a href=""><i class="far fa-file-pdf fs-9"></i></a>
+        </div>
+        <div class="px-lg-4 text-center d-shadow-3">
+            <a href="..{{d.arquivo.url}}"><h3 class="fw-bold text-uppercase text-lg-start">{{d.titulo}}</h3></a>
+            <div class="d-lg-flex justify-content-lg-between">
+                <p class="mb-1 fs-5 pe-lg-5"><span class="fw-bold pe-lg-0">Análise de Conjuntura – </span> <span class="">{% if d.numero < 10 %}0{% endif %}{{d.numero}}</span></p>
+                <p class="mb-1 fs-5 row row-cols-lg-auto"><span class="fw-bold pe-lg-0"><i class="fas fa-calendar-alt pe-2"></i>Data de Publicação:</span> <span class="ps-lg-2">{{d.data}}</span></p>
+            </div>
+            <p class="mb-1 fs-5 text-lg-start">{% if d.list_autores.count > 1 %}<i class="fas fa-users pe-2"></i><span class="fw-bold">Autores(as){% else %}<i class="fas fa-user pe-2"></i><span class="fw-bold">Autor(a){% endif %}:</span><span class="text-center row-cols-md-auto flex-md-wrap">
+{% for a in d.list_autores %}<span class="fs-5"> {{a.autor__nome}}{% if not forloop.last %},{% endif %}</span>{% endfor %}</span></p>
+        </div>
+    </div>
+{% endfor %}
+    </div>
+    <div class="container d-shadow-dark">
+        {% include "dados/pagination_documents_2.html" with page=documents %}
+    </div>
+</div>
+{% endblock %}

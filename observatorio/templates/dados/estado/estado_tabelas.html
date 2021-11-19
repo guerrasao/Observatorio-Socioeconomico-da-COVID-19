@@ -2,15 +2,16 @@
 {% load static %}
 {% load humanize %}
 {% load format_data %}
-{% block title %}Dados Federais - {% if pais %}{{ pais.nome }}{% endif %}{% endblock %}
+{% block title %}Dados Estaduais - {% if estado %}{{ estado.nome }}{% endif %}{% endblock %}
 {% block content %}
 <div class=" box-t1 br-1 bc-1 mb-4-5 d-shadow">
         <div class="p-md-4 p-0 pt-0 tsd2">
-            <h1 class="fw-bold fs-1 text-center color-light-dark-2 mb-3"><i class="fas fa-database me-3"></i>Dados Federais - {% if pais %}{{ pais.nome }}{% endif %} - Tabela e Fontes de Dados</h1>
+            <h1 class="fw-bold fs-1 text-center color-light-dark-2 mb-3"><i class="fas fa-database me-3"></i>Dados Estaduais - {% if estado %}{{ estado.nome }}{% endif %} - Tabela e Fontes de Dados</h1>
             {% include "dados/breadcrumb_ini.html" %}
                     <li class="breadcrumb-item"><a href="{% url 'pagina_inicial' %}">OSE</a></li>
                     <li class="breadcrumb-item color-light-dark-2"><a href="{% url 'dados' %}">Dados</a></li>
-                    <li class="breadcrumb-item active color-light-dark-2" aria-current="page"><a href="{% url 'pais_graficos' pais=pais.nome_normalizado %}">Federais - {% if pais %}{{ pais.nome }}{% endif %}</a></li>
+                    <li class="breadcrumb-item color-light-dark-2"><a href="{% url 'estados' %}">Estaduais</a></li>
+                    <li class="breadcrumb-item color-light-dark-2"><a href="{% url 'estado' estado=estado.nome_normalizado %}">{% if estado %}{{ estado.nome }}{% endif %}</a></li>
                     <li class="breadcrumb-item active color-light-dark-2" aria-current="page">Tabela e Fontes de Dados</li>
             {% include "dados/breadcrumb_end.html" %}
             <div class="fs-5"><p>Última Atualização em: {{ultima_atualizacao}}</p></div>

@@ -13,7 +13,8 @@ function drawchart{{grafico.id}}() {
         {% if variavel_grafico.grafico.id == grafico.id %}
             {% for variavel_pais in variaveis_pais %}
                 {% if variavel_pais.id == variavel_grafico.variavel.id %}
-                    '{{variavel_pais.nome}}{% if variavel_pais.unidade == 'REAL' %} (R$){% elif variavel_pais.unidade == 'PORC' %} (%){% elif variavel_pais.unidade == 'DOLA' %} ($){% elif variavel_pais.unidade == 'EURO' %} (€){% endif %}'
+                    {label: '{{variavel_pais.nome}}', type: 'number'}
+                    {# {% if variavel_pais.unidade == 'REAL' %} (R$){% elif variavel_pais.unidade == 'PORC' %} (%){% elif variavel_pais.unidade == 'DOLA' %} ($){% elif variavel_pais.unidade == 'EURO' %} (€){% endif %} #}
                     {% if not forloop.forloop.forloop.last %},{% endif %}
                 {% endif %}
             {% endfor %}
